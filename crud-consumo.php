@@ -1,0 +1,160 @@
+
+<!DOCTYPE HTML>  
+<html>
+<head>
+<style>
+.error {color: #FF0000;}
+</style>
+</head>
+<body>  
+
+<?php
+// define variables and set to empty values
+$nomeErr = $emailErr = $sexoErr = $websiteErr = $enderecErr = $cepErr = $nascimento = $consumidora = $kwh = $valor = "";
+$nome = $email = $gender = $comment = $website = $cep = $endereco = $nascimErr = $consumErr = $kwhErr = $valorErr = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["nome"])) {
+        $nomeErr = "Nome é obrigatório";
+    } else {
+        $nome = test_input($_POST["nome"]);
+        // check if name only contains letters and whitespace
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$nome)) {
+        $nomeErr = "Apenas letras e espaço são permitidos";
+        }
+    }
+    
+    if (empty($_POST["email"])) {
+        $emailErr = "Email é obrigatório";
+    } else {
+        $email = test_input($_POST["email"]);
+        // check if e-mail address is well-formed
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailErr = "Email inválido";
+        }
+    }
+
+    if(empty($_POST["nascimento"])){
+        $nascimErr = "Data de nascimento é obrigatória";
+    } else {
+        $nascimento = test_input($_POST["nascimento"]);
+    } 
+
+    if(empty($_POST["cep"])){
+        $cepErr = "CEP deve ser obrigatório";
+    } else {
+        $cep = test_input($_POST["cep"]);
+    }
+
+    if(empty($_POST["endereco"])){
+        $enderecErr = "Endereço deve ser obrigatório";
+    } else {
+        $endereco = test_input($_POST["endereco"]);
+    }
+    
+    if (empty($_POST["website"])) {
+        $website = "";
+    } else {
+        $website = test_input($_POST["website"]);
+        // check if URL address syntax is valid (this regular expression also allows dashes in the URL)
+        if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
+        $websiteErr = "URL inválida";
+        }
+    }
+
+    if (empty($_POST["gender"])) {
+        $genderErr = "Gênero é obrigatório";
+    } else {
+        $gender = test_input($_POST["gender"]);
+
+    if(empty($_POST["consumidora"])){
+        $consumErr = "Unidade consumidora deve ser obrigatória";
+    } else {
+        $consumidora = test_input($_POST["consumidora"]);
+    }
+    }
+
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
+
+// nome, sexo, endereco. cep, bairro, cpf, nascimento, data vencimento, unidade consumidora, email, kwh, valor total, site
+
+<h2>Formulário - Consumo de energia</h2>
+<p><span class="error">* required field</span></p>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
+    Nome: <input type="text" name="nome" value="<?php echo $nome;?>">
+    <span class="error">* <?php echo $nomeErr;?></span>
+
+    E-mail: <input type="text" name="email" value="<?php echo $email;?>">
+    <span class="error">* <?php echo $emailErr;?></span>
+    <br><br>
+
+    Nascimento: <input type="date" name="nascimento" value="<?php echo $nascimento;?>">
+    <span class="error">* <?php echo $nascimErr;?></span>
+
+    CEP: <input type="text" name="cep" value="<?php echo $cep;?>">
+    <span class="error">* <?php echo $cepErr;?></span>
+    <br><br>
+
+    Endereço: <input type="text" name="endereco" value="<?php echo $endereco?>">
+    <span class="error">* <?php echo $enderecErr;?></span>
+    <br><br>
+
+    Sexo:
+    <input type="radio" name="gender" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="feminino">Feminino
+    <input type="radio" name="gender" <?php if (isset($gender) && $gender=="male") echo "checked";?> value="masculino">Masculino
+    <input type="radio" name="gender" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="outro">Outro  
+    <span class="error">* <?php echo $genderErr;?></span>
+    <br><br>  
+
+    Unidade consumidora: <input type="text" name="consumidora" value="<?php echo $consumidora;?>">
+    <span class="error">* <?php echo $consumErr;?></span>
+
+    Website: <input type="text" name="website" value="<?php echo $website;?>">
+    <span class="error"><?php echo $websiteErr;?></span>
+    <br><br>
+
+    Kwh: <input type="number" name="kwh" value="<?php echo $kwh;?>">
+    <span class="error"><?php echo $kwhErr;?></span>
+    
+    Valor total: <input type="number" name="valor" value="<?php echo $valor;?>">
+    <span class="error"><?php echo $valorErr;?></span>
+    <br><br>
+
+    <input type="submit" name="submit" value="Submit">    
+</form>
+
+<?php
+echo "<h2>Your Input:</h2>";
+echo $nome;
+echo "<br>";
+echo $nascimento;
+echo "<br>";
+echo "$gender";
+echo "<br>";
+echo $email;
+echo "<br>";
+echo "$cep";
+echo "<br>";
+echo "$endereco";
+echo "<br>";
+echo "$consumidora";
+echo "<br>";
+echo $website;
+echo "<br>";
+echo "$kwh";
+echo "<br>";
+echo "$valor";
+?>
+
+</body>
+</html>
+
+
