@@ -10,10 +10,11 @@
 
 <?php
 // define variables and set to empty values
-$nomeErr = $emailErr = $sexoErr = $websiteErr = $enderecErr = $cepErr = $nascimento = $consumidora = $kwh = $valor = "";
-$nome = $email = $gender = $comment = $website = $cep = $endereco = $nascimErr = $consumErr = $kwhErr = $valorErr = "";
+$nomeErr = $emailErr = $sexoErr = $websiteErr = $enderecErr = $cepErr = $nascimento = $consumidora = $kwh = $valor = $cpf = $bairro = "";
+$nome = $email = $gender = $comment = $website = $cep = $endereco = $nascimErr = $consumErr = $kwhErr = $valorErr = $cpfErr = $bairroErr = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
     if (empty($_POST["nome"])) {
         $nomeErr = "Nome é obrigatório";
     } else {
@@ -72,6 +73,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $consumidora = test_input($_POST["consumidora"]);
     }
+
+   if(empty($_POST["kwh"])){
+        $kwhErr = "Unidade obrigatória";
+    } else {
+        $kwh = test_input($_POST["kwh"]);
+    } 
+
+    if(empty($_POST["valor"])){
+        $valorErr = "Unidade obrigatória";
+    } else {
+        $valor = test_input($_POST["kwh"]);
+    } 
+
+    if(empty($_POST["cpf"])){
+        $cpfErr = "Unidade obrigatória";
+    } else {
+        $cpf = test_input($_POST["cpf"]);
+    } 
+
+    if(empty($_POST["bairro"])){
+        $bairroErr = "Unidade obrigatória";
+    } else {
+        $bairro = test_input($_POST["bairro"]);
+    } 
+
     }
 
 }
@@ -96,6 +122,10 @@ function test_input($data) {
     <span class="error">* <?php echo $emailErr;?></span>
     <br><br>
 
+    CPF: <input type="text" name="cpf" value="<?php echo $cpf?>">
+    <span class="error">* <?php echo $cpfErr;?></span>
+    <br><br>
+
     Nascimento: <input type="date" name="nascimento" value="<?php echo $nascimento;?>">
     <span class="error">* <?php echo $nascimErr;?></span>
 
@@ -106,6 +136,11 @@ function test_input($data) {
     Endereço: <input type="text" name="endereco" value="<?php echo $endereco?>">
     <span class="error">* <?php echo $enderecErr;?></span>
     <br><br>
+    
+    Bairro: <input type="text" name="bairro" value="<?php echo $bairro?>">
+    <span class="error">* <?php echo $bairroErr;?></span>
+    <br><br>
+
 
     Sexo:
     <input type="radio" name="gender" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="feminino">Feminino
@@ -128,7 +163,7 @@ function test_input($data) {
     <span class="error"><?php echo $valorErr;?></span>
     <br><br>
 
-    <input type="submit" name="submit" value="Submit">    
+    <input type="submit" name="submit" value="submit">    
 </form>
 
 <?php
